@@ -70,9 +70,6 @@ export default class Login extends React.Component {
     return(
       <View style={styles.container}>
         <View style={styles.row}>
-          <Image
-            source={require('./logo.png')}
-          />
           <Text style={styles.title}>IF ONLINE</Text>
         </View>
         <View style={styles.row}>
