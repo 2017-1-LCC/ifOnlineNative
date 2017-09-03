@@ -1,11 +1,40 @@
 import React from 'react';
+import {AsyncStorage} from 'react-native';
+import {Router, Scene} from 'react-native-router-flux';
+import Content from './src/index';
 import Login from './src/login/Login';
-import Profile from './src/student/Profile';
+
+const STORAGE_KEY = 'TOKEN';
+const STORAGE_USER = 'ID_USER';
 
 export default class App extends React.Component {
+
+  constructor() {
+    super();
+    this.state = {
+      isAuth:false,
+      token:null,
+      idUser:null
+    }
+  }
+
+  async componentWillMount() {
+    await Expo.Font.loadAsync({
+      Roboto: require("native-base/Fonts/Roboto.ttf"),
+      Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
+      Ionicons: require("native-base/Fonts/Ionicons.ttf")
+    });
+    const token = await AsyncStorage.getItem(STORAGE_KEY);
+    const idUser = await AsyncStorage.getItem(STORAGE_USER);  
+    if(token) {
+      this.setState({ isAuth: true, token:token , idUser:idUser});
+    } else {
+      this.setState({ isAuth: false });
+    }
+
+  }
+
   render() {
-    return (
-      <Login />
-    );
+      return <Content token={this.state.token} isAuth={this.state.isAuth} idUser={this.state.idUser}/>
   }
 }

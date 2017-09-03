@@ -10,11 +10,12 @@ import {
   Icon
 } from "native-base";
 
-const routes = ["Home", "Chat", "Profile"];
+const routes = ["Profile","Grupos"];
 
 export default class SideBar extends React.Component {
 
     render(){
+
         return (
       <Container>
         <Content>
@@ -23,6 +24,7 @@ export default class SideBar extends React.Component {
               uri: "https://github.com/GeekyAnts/NativeBase-KitchenSink/raw/react-navigation/img/drawer-cover.png"
             }}
             style={{
+              paddingTop:50,
               height: 120,
               alignSelf: "stretch",
               justifyContent: "center",
@@ -41,8 +43,7 @@ export default class SideBar extends React.Component {
               return (
                 <ListItem
                   button
-                  onPress={() => this.props.navigation.navigate(data)}
-                >
+                  onPress={() => this.props.navigation.navigate(data)}>
                   <Text>{data}</Text>
                 </ListItem>
               );

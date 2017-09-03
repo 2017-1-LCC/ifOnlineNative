@@ -10,7 +10,8 @@ import {
   Image
 } from 'react-native';
 
-let STORAGE_KEY = 'TOKEN';
+const STORAGE_KEY = 'TOKEN';
+const STORAGE_USER = 'ID_USER';
 
 const Form = t.form.Form;
 
@@ -22,8 +23,15 @@ const User = t.struct({
 const options = {};
 
 export default class Login extends React.Component {
+  
+  constructor(props) {
+    super(props);
+    if(this.props.screenProps.isAuth) {
+      this.props.navigation.navigate('Profile');
+    }
+  }
 
-  async _addToken(item, selectedValue) {
+  async _addInStorage(item, selectedValue) {
     try {
       await AsyncStorage.setItem(item, selectedValue);
     } catch (error) {
@@ -31,17 +39,8 @@ export default class Login extends React.Component {
     } 
   };
 
-  async _logout() {
-    try {
-      await AsyncStorage.removeItem(STORAGE_KEY);
-      AlertIOS.alert("Logout Success!")
-    } catch (error) {
-      console.log('AsyncStorage error: ' + error.message);
-    }
-  };
-
   cancel() {
-    console.log("fecha aplicativo");
+
   }
 
   singUp() {
@@ -60,7 +59,11 @@ export default class Login extends React.Component {
       })
       .then(response => response.json())
       .then(token => {
-        this._addToken(STORAGE_KEY,token.token);
+        this._addInStorage(STORAGE_KEY,token.token);
+        this._addInStorage(STORAGE_USER,token.idUser);
+      })
+      .then(() => {
+        this.props.navigation.navigate('Profile');
       })
       .done()
     }
@@ -120,5 +123,3 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
 })
-
-AppRegistry.registerComponent('AwesomeProject', () => AwesomeProject);
