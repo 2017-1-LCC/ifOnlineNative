@@ -19,7 +19,7 @@ export default class Grupo extends React.Component {
 
   constructor(props) {
     super(props);
-    console.log("props em onegruop: ",this.props);
+    console.log("props em one gruop: ",this.props.navigation.state.params.idGroup);
   }
 
   componentWillMount() {
