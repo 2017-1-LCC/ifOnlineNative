@@ -22,7 +22,6 @@ export default class Grupo extends React.Component {
     this.state = {
       group:{}
     }
-    console.log("props em one gruop: ",this.props.navigation.state.params.idGroup);
   }
 
   componentWillMount() {
@@ -51,12 +50,12 @@ export default class Grupo extends React.Component {
               </Button>
           </Left>
           <Body>
-              <Title>Grupo de Estudo</Title>
+              <Title>Grupo</Title>
           </Body>
           <Right />
           </Header>
           <Content padder>
-          
+
           </Content>
       </Container>
     )
