@@ -19,11 +19,24 @@ export default class Grupo extends React.Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      group:{}
+    }
     console.log("props em one gruop: ",this.props.navigation.state.params.idGroup);
   }
 
   componentWillMount() {
     console.log("CRIADO COMPONENT ONE GRUPOS");
+    fetch('https://ifonline.herokuapp.com/studygroup/'+this.props.navigation.state.params.idGroup,{
+      method:'GET',
+      headers:{
+        'Accept':'application/json',
+        'Content-Type':'application/json',
+        'Authorization': 'Bearer ' + this.props.screenProps.token
+      }
+    })
+    .then(response => response.json())
+    .then(group => this.setState({group:group}))
   };
 
   render() {
@@ -38,12 +51,12 @@ export default class Grupo extends React.Component {
               </Button>
           </Left>
           <Body>
-              <Title>Grupos</Title>
+              <Title>Grupo de Estudo</Title>
           </Body>
           <Right />
           </Header>
           <Content padder>
-
+          
           </Content>
       </Container>
     )
