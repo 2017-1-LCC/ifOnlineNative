@@ -9,6 +9,7 @@ import {
   TouchableHighlight,
   Image
 } from 'react-native';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const STORAGE_KEY = 'TOKEN';
 const STORAGE_USER = 'ID_USER';
@@ -26,6 +27,9 @@ export default class Login extends React.Component {
   
   constructor(props) {
     super(props);
+    this.state = {
+      isLoading:false
+    }
     if(this.props.screenProps.isAuth) {
       this.props.navigation.navigate('Profile');
     }
@@ -46,6 +50,7 @@ export default class Login extends React.Component {
   singUp() {
     const value = this.refs.form.getValue();
     if(value) {
+      this.setState({isLoading:true});
       fetch('https://ifonline.herokuapp.com/login',{
         method:'POST',
         headers:{
@@ -63,6 +68,7 @@ export default class Login extends React.Component {
         this._addInStorage(STORAGE_USER,token.idUser);
       })
       .then(() => {
+        this.setState({isLoading:false});
         this.props.navigation.navigate('Profile');
       })
       .done()
@@ -70,28 +76,34 @@ export default class Login extends React.Component {
   };
 
   render() {
-    return(
-      <View style={styles.container}>
-        <View style={styles.row}>
-          <Text style={styles.title}>IF ONLINE</Text>
-        </View>
-        <View style={styles.row}>
-          <Form
-            ref="form"
-            type={User}
-            options={options}
-          />
-        </View>  
-        <View style={styles.row}>
-          <TouchableHighlight style={styles.button} onPress={this.singUp.bind(this)} underlayColor='#99d9f4'>
-            <Text style={styles.buttonText}>Login</Text>
-          </TouchableHighlight>
-          <TouchableHighlight style={styles.button} onPress={this.cancel.bind(this)} underlayColor='#99d9f4'>
-            <Text style={styles.buttonText}>Sair</Text>
-          </TouchableHighlight>
-        </View>
-      </View>
-    );
+      if(!this.state.isLoading) {
+       return( <View style={styles.container}>
+          <View style={styles.row}>
+            <Text style={styles.title}>IF ONLINE</Text>
+          </View>
+          <View style={styles.row}>
+            <Form
+              ref="form"
+              type={User}
+              options={options}
+            />
+          </View>  
+          <View style={styles.row}>
+            <TouchableHighlight style={styles.button} onPress={this.singUp.bind(this)} underlayColor='#99d9f4'>
+              <Text style={styles.buttonText}>Login</Text>
+            </TouchableHighlight>
+            <TouchableHighlight style={styles.button} onPress={this.cancel.bind(this)} underlayColor='#99d9f4'>
+              <Text style={styles.buttonText}>Sair</Text>
+            </TouchableHighlight>
+          </View>
+        </View> );
+      } else {
+        return (
+          <View style={{ flex: 1 }}>
+            <Spinner visible={this.state.isLoading} color="white" overlayColor="green"/>
+          </View>
+        )
+      }
   }
 }
 
