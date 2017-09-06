@@ -65,21 +65,7 @@ export default class Grupo extends React.Component {
               <CardItem>
                 <Body>
                   <Text>Cidade: { this.state.group.local }</Text>
-                  <List dataArray={this.state.group.students}
-                    renderRow={(student) =>
-                    <ListItem>
-                      <Text>{student.nick}</Text>
-                    </ListItem>
-                    
-                    <ListItem>
-                      <Text>{student.info.name}</Text>
-                    </ListItem>
 
-                    <ListItem>
-                      <Text>{student.info.email}</Text>
-                    </ListItem>
-                    }>
-                  </List>
                 </Body>
               </CardItem>
               <CardItem footer>
