@@ -3,7 +3,6 @@ import {
     StatusBar, 
     TouchableHighlight, 
     AsyncStorage, 
-    AlertIOS, 
     StyleSheet,
     View,
     Image
@@ -23,7 +22,6 @@ import {
   Icon,
   Right
 } from "native-base";
-import {Actions} from 'react-native-router-flux';
 
 const STORAGE_KEY = 'TOKEN';
 
@@ -74,30 +72,51 @@ export default class Profile extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            user:{info:{},user:{},groups:[]}
+            user:{groups:[],user:{}}
         }
     };
 
     componentWillMount() {
-        console.log("CRIADO COMPONENT PROFILE");
-        fetch('https://ifonline.herokuapp.com/findbyuser/'+this.props.screenProps.idUser,{
-        method:'GET',
-        headers:{
-          'Accept':'application/json',
-          'Content-Type':'application/json',
-          'Authorization': 'Bearer ' + this.props.screenProps.token
+        console.log("WILL MOUNT PROFILE ");
+        // SE O TYPE USER FOR STUDENT REQUEST NA API DE STUDENT SE NÃO REQUEST NA API DE TEACHER
+        if(this.props.screenProps.typeUser === 'STUDENT') {
+            fetch('https://ifonline.herokuapp.com/findstudentbyuser/'+this.props.screenProps.idUser,{
+            method:'GET',
+            headers:{
+            'Accept':'application/json',
+            'Content-Type':'application/json',
+            'Authorization': 'Bearer ' + this.props.screenProps.token
+                }
+            })
+            .then(response => response.json())
+            .then(user => {
+                console.log("USER NO THEN: ",user);
+                this.setState({user:user});
+            })
+            .catch(error => console.log(error));
+        } else {
+            fetch('https://ifonline.herokuapp.com/findteacherbyuser/'+this.props.screenProps.idUser,{
+            method:'GET',
+            headers:{
+            'Accept':'application/json',
+            'Content-Type':'application/json',
+            'Authorization': 'Bearer ' + this.props.screenProps.token
+                }
+            })
+            .then(response => response.json())
+            .then(user => {
+                console.log("USER NO THEN: ",user);
+                this.setState({user:user});
+            })
+            .catch(error => console.log(error));
         }
-      })
-      .then(response => response.json())
-      .then(user => this.setState({user:user}))
-        // fazer req para /user e buscar se é student ou teacher.
     };
+
 
     async _logout() {
         try {
             await AsyncStorage.removeItem(STORAGE_KEY);
             this.props.navigation.navigate('Login');
-            AlertIOS.alert("Logout Success!")
         } catch (error) {
             console.log('AsyncStorage error: ' + error.message);
         }
@@ -131,10 +150,9 @@ export default class Profile extends React.Component {
                                 />
                             </View>
                             <View style={styles.infoUsuaro}>
-                                <Text style={styles.textInfoUsuario}>Nome: {this.state.user.info.name}</Text>
-                                <Text style={styles.textInfoUsuario}>Registration: {this.state.user.registration}</Text>
-                                <Text style={styles.textInfoUsuario}>E-mail: {this.state.user.info.email}</Text>
-                                <Text style={styles.textInfoUsuario}>Idade: {this.state.user.info.age}</Text>
+                                <Text style={styles.textInfoUsuario}>Nome: {this.state.user.name}</Text>
+                                <Text style={styles.textInfoUsuario}>E-mail: {this.state.user.email}</Text>
+                                <Text style={styles.textInfoUsuario}>Nick: {this.state.user.user.name}</Text>
                             </View>
                         </View>
                     </View>
@@ -145,7 +163,7 @@ export default class Profile extends React.Component {
                         }
                     </View>
             
-                    <TouchableHighlight onPress={this._logout.bind(this)} underlayColor='#99d9f4'>
+                    <TouchableHighlight onPress={this._logout.bind(this,false)} underlayColor='#99d9f4'>
                         <Text >logout</Text>
                     </TouchableHighlight>
                 </Content>
@@ -182,6 +200,6 @@ const styles = StyleSheet.create({
   },
   grupos:{
     padding:5,
-    backgroundColor:'green'
+    backgroundColor:'black'
   }
 })

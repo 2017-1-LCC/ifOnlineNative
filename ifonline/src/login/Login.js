@@ -13,6 +13,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 
 const STORAGE_KEY = 'TOKEN';
 const STORAGE_USER = 'ID_USER';
+const STORAGE_TYPE_USER = "TYPE_USER";
 
 const Form = t.form.Form;
 
@@ -66,6 +67,7 @@ export default class Login extends React.Component {
       .then(token => {
         this._addInStorage(STORAGE_KEY,token.token);
         this._addInStorage(STORAGE_USER,token.idUser);
+        this._addInStorage(STORAGE_TYPE_USER,token.typeUser);
       })
       .then(() => {
         this.setState({isLoading:false});
@@ -91,6 +93,9 @@ export default class Login extends React.Component {
           <View style={styles.row}>
             <TouchableHighlight style={styles.button} onPress={this.singUp.bind(this)} underlayColor='#99d9f4'>
               <Text style={styles.buttonText}>Login</Text>
+            </TouchableHighlight>
+            <TouchableHighlight style={styles.button} onPress={() => this.props.navigation.navigate('CreateUser')} underlayColor='#99d9f4'>
+              <Text style={styles.buttonText}>Novo Usuário</Text>
             </TouchableHighlight>
             <TouchableHighlight style={styles.button} onPress={this.cancel.bind(this)} underlayColor='#99d9f4'>
               <Text style={styles.buttonText}>Sair</Text>

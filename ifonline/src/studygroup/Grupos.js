@@ -17,8 +17,25 @@ import {
 
 export default class Grupos extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      group:{}
+    }
+  }
+
   componentWillMount() {
     console.log("CRIADO COMPONENT GRUPOS");
+    fetch('https://ifonline.herokuapp.com/studygroup',{
+      'method':'GET',
+      'headers':{
+        'Accept':'application/json',
+        'Content-Type':'application/json',
+        'Authorization':'Bearer ' + this.props.screenProps.token
+      }
+    })
+    .then(response => response.json())
+    .then(group => this.setState({group:group}))
   };
 
   render() {

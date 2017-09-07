@@ -2,6 +2,7 @@ import React from "react";
 import {AppRegistry} from 'react-native';
 import Profile from "./student/Profile.js";
 import Grupos from './studygroup/Grupos.js';
+import CreateUser from './student/FormCreate.js';
 import OneGroup from './studygroup/OneGroup.js';
 import Login from './login/Login.js';
 import SideBar from "./sidebar/SideBar.js";
@@ -12,7 +13,8 @@ const Router = DrawerNavigator(
     Login: { screen: Login },
     Profile: { screen: Profile },
     Grupos: { screen: Grupos },
-    OneGroup: { screen: OneGroup}
+    OneGroup: { screen: OneGroup },
+    CreateUser: { screen: CreateUser }
   },
   {
     contentComponent: props => <SideBar {...props}/>

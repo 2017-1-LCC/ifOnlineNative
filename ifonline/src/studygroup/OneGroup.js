@@ -17,6 +17,23 @@ import {
   List
 } from "native-base";
 
+
+class ListStudents extends React.Component {
+
+  constructor(props) {
+    super(props);
+    console.log("props listStudents: ",props);
+  };
+
+  render() {
+    return(
+          <ListItem>
+            <Text>{this.props.student.info.name}</Text>
+          </ListItem>
+    )
+  }
+}
+
 export default class Grupo extends React.Component {
 
   constructor(props) {
@@ -69,9 +86,17 @@ export default class Grupo extends React.Component {
                 </Body>
               </CardItem>
               <CardItem footer>
-                <Text>GeekyAnts</Text>
+                <Text>footer</Text>
               </CardItem>
           </Card>
+          <List>
+            <ListItem itemDivider>
+              <Text>Alunos do Grupo</Text>
+            </ListItem>
+            {
+              this.state.group.students.map(student => <ListStudents key={student._id} student={student} /> )
+            }                    
+          </List>
 
           </Content>
       </Container>

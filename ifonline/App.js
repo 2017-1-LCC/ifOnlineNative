@@ -6,6 +6,8 @@ import Login from './src/login/Login';
 
 const STORAGE_KEY = 'TOKEN';
 const STORAGE_USER = 'ID_USER';
+const STORAGE_TYPE_USER = "TYPE_USER";
+
 
 export default class App extends React.Component {
 
@@ -25,9 +27,10 @@ export default class App extends React.Component {
       Ionicons: require("native-base/Fonts/Ionicons.ttf")
     });
     const token = await AsyncStorage.getItem(STORAGE_KEY);
-    const idUser = await AsyncStorage.getItem(STORAGE_USER);  
+    const idUser = await AsyncStorage.getItem(STORAGE_USER);
+    const typeUser = await AsyncStorage.getItem(STORAGE_TYPE_USER)  
     if(token) {
-      this.setState({ isAuth: true, token:token , idUser:idUser});
+      this.setState({ isAuth: true, token:token , idUser:idUser, typeUser:typeUser});
     } else {
       this.setState({ isAuth: false });
     }
