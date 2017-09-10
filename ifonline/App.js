@@ -16,7 +16,8 @@ export default class App extends React.Component {
     this.state = {
       isAuth:false,
       token:null,
-      idUser:null
+      idUser:null,
+      typeUser:null,
     }
   }
 
@@ -38,6 +39,6 @@ export default class App extends React.Component {
   }
 
   render() {
-      return <Content token={this.state.token} isAuth={this.state.isAuth} idUser={this.state.idUser}/>
+      return <Content token={this.state.token} isAuth={this.state.isAuth} idUser={this.state.idUser} typeUser={this.state.typeUser}/>
   }
 }

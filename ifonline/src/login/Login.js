@@ -59,7 +59,7 @@ export default class Login extends React.Component {
           'Content-Type':'application/json',
         },
         body:JSON.stringify({
-          name: value.Nome,
+          username: value.Nome,
           password: value.Senha
         })
       })

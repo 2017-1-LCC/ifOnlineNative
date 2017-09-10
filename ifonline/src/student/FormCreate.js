@@ -16,12 +16,9 @@ import {
 const Form = t.form.Form;
 
 const Objeto = t.struct({
-  Nome: t.String,
-  Senha: t.String,
-  //nick: t.String,  apelido pode ser o login
-  //registration: t.String,  remover esse campo no model
+  username: t.String,
+  password: t.String,
   name: t.String,
-  //age: t.String,  remover idade no model
   birthDate: t.Date,
   email: t.String,
 });
@@ -32,11 +29,11 @@ let formatDate = (format, date) => {
 
 const options = {
   fields: {
-    Nome: {
+    username: {
       label:'Usuário: ',
       help:'nome que será usado para fazer login'
     },
-    Senha: {
+    password: {
       label:'Senha: ',
       help:'digite a senha do usuário'
     },
@@ -85,8 +82,9 @@ export default class FormCreateUserAndStudent extends React.Component {
           'Content-Type':'application/json',
         },
         body:JSON.stringify({
-          name: value.Nome,
-          password: value.Senha
+          username: value.username,
+          password: value.password,
+          typeUser: 'STUDENT'
         })
       })
       .then(response => response.json()) 

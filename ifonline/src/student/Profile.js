@@ -81,11 +81,11 @@ export default class Profile extends React.Component {
         // SE O TYPE USER FOR STUDENT REQUEST NA API DE STUDENT SE NÃO REQUEST NA API DE TEACHER
         if(this.props.screenProps.typeUser === 'STUDENT') {
             fetch('https://ifonline.herokuapp.com/findstudentbyuser/'+this.props.screenProps.idUser,{
-            method:'GET',
-            headers:{
-            'Accept':'application/json',
-            'Content-Type':'application/json',
-            'Authorization': 'Bearer ' + this.props.screenProps.token
+                method:'GET',
+                headers:{
+                    'Accept':'application/json',
+                    'Content-Type':'application/json',
+                    'Authorization': 'Bearer ' + this.props.screenProps.token
                 }
             })
             .then(response => response.json())
@@ -96,16 +96,16 @@ export default class Profile extends React.Component {
             .catch(error => console.log(error));
         } else {
             fetch('https://ifonline.herokuapp.com/findteacherbyuser/'+this.props.screenProps.idUser,{
-            method:'GET',
-            headers:{
-            'Accept':'application/json',
-            'Content-Type':'application/json',
-            'Authorization': 'Bearer ' + this.props.screenProps.token
+                method:'GET',
+                headers:{
+                    'Accept':'application/json',
+                    'Content-Type':'application/json',
+                    'Authorization': 'Bearer ' + this.props.screenProps.token
                 }
             })
             .then(response => response.json())
             .then(user => {
-                console.log("USER NO THEN: ",user);
+                console.log("TEACHER NO THEN: ",user);
                 this.setState({user:user});
             })
             .catch(error => console.log(error));
@@ -152,7 +152,9 @@ export default class Profile extends React.Component {
                             <View style={styles.infoUsuaro}>
                                 <Text style={styles.textInfoUsuario}>Nome: {this.state.user.name}</Text>
                                 <Text style={styles.textInfoUsuario}>E-mail: {this.state.user.email}</Text>
-                                <Text style={styles.textInfoUsuario}>Nick: {this.state.user.user.name}</Text>
+                                <Text style={styles.textInfoUsuario}>Nick: {this.state.user.user.username}</Text>
+                                <Text style={styles.textInfoUsuario}>Tipo: {this.state.user.user.typeUser}</Text>
+                                
                             </View>
                         </View>
                     </View>
