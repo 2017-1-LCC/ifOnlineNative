@@ -14,6 +14,11 @@ const routes = ["Profile","Grupos"];
 
 export default class SideBar extends React.Component {
 
+    constructor(props) {
+      /*console.log("props no sidebar: ",props);*/
+      super(props);
+    }
+
     render(){
 
         return (

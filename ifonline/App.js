@@ -13,12 +13,6 @@ export default class App extends React.Component {
 
   constructor() {
     super();
-    this.state = {
-      isAuth:false,
-      token:null,
-      idUser:null,
-      typeUser:null,
-    }
   }
 
   async componentWillMount() {
@@ -27,6 +21,12 @@ export default class App extends React.Component {
       Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
       Ionicons: require("native-base/Fonts/Ionicons.ttf")
     });
+/*    await AsyncStorage.removeItem(STORAGE_KEY);
+    await AsyncStorage.removeItem(STORAGE_USER);
+    await AsyncStorage.removeItem(STORAGE_TYPE_USER);*/
+  };
+
+/*  async componentDidMount() {
     const token = await AsyncStorage.getItem(STORAGE_KEY);
     const idUser = await AsyncStorage.getItem(STORAGE_USER);
     const typeUser = await AsyncStorage.getItem(STORAGE_TYPE_USER)  
@@ -35,10 +35,9 @@ export default class App extends React.Component {
     } else {
       this.setState({ isAuth: false });
     }
-
-  }
+  }*/
 
   render() {
-      return <Content token={this.state.token} isAuth={this.state.isAuth} idUser={this.state.idUser} typeUser={this.state.typeUser}/>
+      return <Content/>
   }
 }

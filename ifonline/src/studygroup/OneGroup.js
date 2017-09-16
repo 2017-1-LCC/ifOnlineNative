@@ -22,14 +22,13 @@ class ListStudents extends React.Component {
 
   constructor(props) {
     super(props);
-    console.log("props listStudents: ",props);
   };
 
   render() {
     return(
-          <ListItem>
-            <Text>{this.props.student.info.name}</Text>
-          </ListItem>
+      <ListItem>
+        <Text>{this.props.student.info.name}</Text>
+      </ListItem>
     )
   }
 }
@@ -39,23 +38,13 @@ export default class Grupo extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      group:{students:[]}
+      group:this.props.navigation.state.params.group,
+      user:this.props.navigation.state.params.user
     }
   }
 
   componentWillMount() {
     console.log("CRIADO COMPONENT ONE GRUPOS");
-    fetch('https://ifonline.herokuapp.com/studygroup/'+this.props.navigation.state.params.idGroup,{
-      method:'GET',
-      headers:{
-        'Accept':'application/json',
-        'Content-Type':'application/json',
-        'Authorization': 'Bearer ' + this.props.screenProps.token
-      }
-    })
-    .then(response => response.json())
-    .then(group => this.setState({group:group}))
-    .then(() => console.log("grup: ",this.state.group))
   };
 
   render() {
@@ -70,18 +59,18 @@ export default class Grupo extends React.Component {
               </Button>
           </Left>
           <Body>
-              <Title>Grupo </Title>
+              <Title>Grupo</Title>
           </Body>
           <Right />
           </Header>
           <Content padder>
             <Card>
               <CardItem header>
-                <Text>Disciplina: { this.state.group.matter } </Text>
+                <Text>Disciplina: { this.state.group.discipline } </Text>
               </CardItem>
               <CardItem>
                 <Body>
-                  <Text>Cidade: { this.state.group.local }</Text>
+                  <Text>Turma: { this.state.group.academicClass }</Text>
 
                 </Body>
               </CardItem>

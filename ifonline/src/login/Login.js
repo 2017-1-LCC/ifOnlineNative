@@ -31,11 +31,8 @@ export default class Login extends React.Component {
     this.state = {
       isLoading:false
     }
-    if(this.props.screenProps.isAuth) {
-      this.props.navigation.navigate('Profile');
-    }
   }
-
+/*
   async _addInStorage(item, selectedValue) {
     try {
       await AsyncStorage.setItem(item, selectedValue);
@@ -48,6 +45,16 @@ export default class Login extends React.Component {
 
   }
 
+  async removeToken() {
+      try {
+          await AsyncStorage.removeItem(STORAGE_KEY);
+          await AsyncStorage.removeItem(STORAGE_USER);
+          await AsyncStorage.removeItem(STORAGE_TYPE_USER)  
+      } catch (error) {
+          console.log('AsyncStorage error: ' + error.message);
+      }
+  };
+*/
   singUp() {
     const value = this.refs.form.getValue();
     if(value) {
@@ -60,18 +67,18 @@ export default class Login extends React.Component {
         },
         body:JSON.stringify({
           username: value.Nome,
-          password: value.Senha
+          password: value.Senha,
+          typeUser: 'STUDENT'
         })
       })
       .then(response => response.json())
       .then(token => {
-        this._addInStorage(STORAGE_KEY,token.token);
-        this._addInStorage(STORAGE_USER,token.idUser);
-        this._addInStorage(STORAGE_TYPE_USER,token.typeUser);
-      })
-      .then(() => {
+        //this.removeToken();
+        //this._addInStorage(STORAGE_KEY,token.token);
+        //this._addInStorage(STORAGE_USER,token.idUser);
+        //this._addInStorage(STORAGE_TYPE_USER,token.typeUser);
         this.setState({isLoading:false});
-        this.props.navigation.navigate('Profile');
+        this.props.navigation.navigate('Profile',{dados:token});
       })
       .done()
     }
@@ -97,7 +104,7 @@ export default class Login extends React.Component {
             <TouchableHighlight style={styles.button} onPress={() => this.props.navigation.navigate('CreateUser')} underlayColor='#99d9f4'>
               <Text style={styles.buttonText}>Novo Usuário</Text>
             </TouchableHighlight>
-            <TouchableHighlight style={styles.button} onPress={this.cancel.bind(this)} underlayColor='#99d9f4'>
+            <TouchableHighlight style={styles.button} underlayColor='#99d9f4'>
               <Text style={styles.buttonText}>Sair</Text>
             </TouchableHighlight>
           </View>

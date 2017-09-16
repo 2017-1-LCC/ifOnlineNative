@@ -3,8 +3,6 @@ import t from 'tcomb-form-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import moment from 'moment';
 import {
-  AppRegistry,
-  AsyncStorage,
   StyleSheet,
   Text,
   View,
@@ -13,15 +11,13 @@ import {
   Image
 } from 'react-native';
 
-
 const Form = t.form.Form;
 
 const Objeto = t.struct({
-  username: t.String,
-  password: t.String,
-  name: t.String,
-  birthDate: t.Date,
-  email: t.String,
+  discipline:t.String,
+  academicClass:t.String,
+  dateStart:t.Date,
+  dateEnd:t.Date
 });
 
 let formatDate = (format, date) => {
@@ -30,42 +26,39 @@ let formatDate = (format, date) => {
 
 const options = {
   fields: {
-    username: {
-      label:'Usuário: ',
-      help:'nome que será usado para fazer login'
+    discipline: {
+      label:'Disciplina: ',
+      help:'Disciplina foco do grupo'
     },
-    password: {
-      label:'Senha: ',
-      help:'digite a senha do usuário'
+    academicClass: {
+      label:'Turma: ',
+      help:'Turma da disciplina'
     },
-    nick: {
-      label:'Apelido: ',
-      help:'digite um apelido para o usuário'
-    },
-    name: {
-      label:'Nome Completo: ',
-      help:'digite seu nome completo'
-    },
-    birthDate: {
-      label:'Data Nascimento: ',
-      help:'digite a data de nascimento',
+    dateStart: {
+      label:'Data de início: ',
+      help:'Data em que começou o semestre',
       config:{
         format: (date) =>  formatDate("DD-MM-YYYY", date)
       }
     },
-    email: {
-      label:'E-mail: ',
-      help:'digite o email do usuário'
+    dateEnd: {
+      label:'Data de termino: ',
+      help:'Data em que termina o semestre',
+      config:{
+        format: (date) =>  formatDate("DD-MM-YYYY", date)
+      }
     }
   }
 };
 
-export default class FormCreateUserAndStudent extends React.Component {
+export default class FormCreateStudyGroup extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      isLoading:false
+      isLoading:false,
+      dados:this.props.navigation.state.params.dados,
+      idTeacher:this.props.navigation.state.params.idTeacher
     }
   }
 
@@ -73,49 +66,36 @@ export default class FormCreateUserAndStudent extends React.Component {
     const value = this.refs.form.getValue();
     if(value) {
       this.setState({isLoading:true});
-      fetch('https://ifonline.herokuapp.com/user',{
+      fetch('https://ifonline.herokuapp.com/studygroup',{
         method:'POST',
         headers:{
           'Accept':'application/json',
           'Content-Type':'application/json',
+          'Authorization': 'Bearer ' + this.props.navigation.state.params.dados.token
         },
         body:JSON.stringify({
-          username: value.username,
-          password: value.password,
-          typeUser: 'STUDENT'
+          admin:this.state.idTeacher,
+          discipline:value.discipline,
+          academicClass:value.academicClass,
+          dateStart:value.dateStart,
+          dateEnd:value.dateEnd
         })
       })
-      .then(response => response.json()) 
-      .then(user => {
-        fetch('https://ifonline.herokuapp.com/student',{
-          method:'POST',
-          headers:{
-            'Accept':'application/json',
-            'Content-Type':'application/json',
-          },
-          body:JSON.stringify({
-            name: value.name,
-            birthDate: value.birthDate,
-            email:value.email, 
-            user:user._id
-          })
-        })
-        .then(response => response.json())
-        .then(student => {
-          this.setState({isLoading:false});
-          this.props.navigation.navigate('Login');
-        })
-      }) 
-      .catch(error => console.log("ERROR"+error))
+      .then(response => response.json())
+      .then(group => {
+        this.setState({isLoading:false});
+        this.props.navigation.navigate('Profile',{dados:this.state.dados});
+      })
+      .catch(error => console.log("Error:",error))
     }
-    
-  };
+  }
 
   render() {
       if(!this.state.isLoading) {
-       return( <ScrollView style={styles.container}>
+       return( <ScrollView 
+       style={styles.container}>
           <View style={styles.row}>
-            <Text style={styles.title}>IF ONLINE</Text>
+            <Text style={styles.title}>Novo Grupo</Text>
           </View>
           <View style={styles.row}>
             <Form
@@ -123,12 +103,10 @@ export default class FormCreateUserAndStudent extends React.Component {
               type={Objeto}
               options={options}
             />
-          </View>  
-          <View style={styles.row}>
             <TouchableHighlight style={styles.button} onPress={this.create.bind(this)} underlayColor='#99d9f4'>
               <Text style={styles.buttonText}>Cadastrar</Text>
             </TouchableHighlight>
-            <TouchableHighlight style={styles.button} onPress={() => this.props.navigation.navigate('Login')} underlayColor='#99d9f4'>
+            <TouchableHighlight style={styles.button} onPress={() => this.props.navigation.navigate('Profile',{dados:this.state.dados})} underlayColor='#99d9f4'>
               <Text style={styles.buttonText}>Sair</Text>
             </TouchableHighlight>
           </View>
@@ -145,12 +123,12 @@ export default class FormCreateUserAndStudent extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    paddingLeft:13,
-    paddingRight:11,
+    marginTop: 50,
+    padding: 20,
     backgroundColor: '#ffffff',
   },
   title: {
-    fontSize: 15,
+    fontSize: 30,
     alignSelf: 'center',
     marginBottom: 30
   },
